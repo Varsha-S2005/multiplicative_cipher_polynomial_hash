@@ -21,36 +21,16 @@ int mod_inverse(int k) {
     return -1; 
 }
 
-long long power(long long base, long long exp, long long mod) {
-    long long res = 1;
-    base %= mod;
-    for (int i = 0; i < exp; i++) {
-        res = (res * base) % mod;
-    }
-    return res;
-}
-
-unsigned long long finalize(unsigned long long h) {
-    h ^= (h >> 16);           
-    h *= 0x85ebca6b;         
-    h ^= (h >> 13);          
-    return h;
-}
-
 unsigned long long calculate_hash(string s, int key) {
-    const int p = 31;
-    const long long m = 1e9 + 9;
-    unsigned long long hash_value = key; 
-    
+    unsigned long long hash_value = 1469598103934665603ULL ^ key;
     for (int i = 0; i < s.size(); i++) {
-        int val = toupper(s[i]) - 'A' + 1;
-        long long p_pow = power(p, i, m);
-        hash_value = (hash_value + (val * p_pow)) % m;
+        unsigned long long val = (unsigned long long)toupper(s[i]);
+        hash_value ^= val;                 
+        hash_value *= 1099511628211ULL;    
     }
-    return finalize(hash_value);
-}
 
-// --- 3. CIPHER LOGIC ---
+    return hash_value;
+}
 
 string encrypt(string s, int k) {
     string res = "";
