@@ -21,6 +21,11 @@ int mod_inverse(int k) {
     return -1; 
 }
 
+unsigned long long finalize(unsigned long long h) { 
+    h ^= (h >> 16); h *= 0x85ebca6b;
+    h ^= (h >> 13); 
+    return h; }
+
 unsigned long long calculate_hash(string s, int key) {
     const unsigned long long FNV_prime = 1099511628211ULL;
     unsigned long long hash_value = 1469598103934665603ULL ^ key;
