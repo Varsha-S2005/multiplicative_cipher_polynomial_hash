@@ -22,14 +22,24 @@ int mod_inverse(int k) {
 }
 
 unsigned long long calculate_hash(string s, int key) {
+    const unsigned long long FNV_prime = 1099511628211ULL;
     unsigned long long hash_value = 1469598103934665603ULL ^ key;
-    for (int i = 0; i < s.size(); i++) {
-        unsigned long long val = (unsigned long long)toupper(s[i]);
-        hash_value ^= val;                 
-        hash_value *= 1099511628211ULL;    
+
+    long long p = 31;
+    long long p_pow = 1;
+
+    for (char c : s) {
+        int val = toupper(c) - 'A' + 1;
+
+        unsigned long long poly_val = val * p_pow;
+
+        hash_value ^= poly_val;
+        hash_value *= FNV_prime;
+
+        p_pow *= p;
     }
 
-    return hash_value;
+    return finalize(hash_value);
 }
 
 string encrypt(string s, int k) {
