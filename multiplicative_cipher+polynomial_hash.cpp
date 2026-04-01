@@ -22,7 +22,8 @@ int mod_inverse(int k) {
 }
 
 unsigned long long finalize(unsigned long long h) { 
-    h ^= (h >> 16); h *= 0x85ebca6b;
+    h ^= (h >> 16);
+    h *= 0x85ebca6b;
     h ^= (h >> 13); 
     return h; }
 
