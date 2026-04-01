@@ -7,7 +7,7 @@ This project implements a secure communication simulation featuring a **Multipli
 ## 1. Deliverables
 - Encryption/Decryption using Multiplicative Cipher  
 - Hybrid FNV + Polynomial Hash for integrity verification  
-- Round-trip validation (Encrypt → Decrypt → Verify)  
+- Round-trip validation (Plaintext → Hash → Encrypt → Decrypt → Hash → Compare) 
 - Key validation using GCD  
 
 ---
@@ -28,20 +28,29 @@ gcd(k, 26) = 1
 
 ### Hybrid FNV-Polynomial Hash
 
-This project uses a **customized hashing approach** combining:
+This project uses a **customized hashing approach** that combines:
 
-- **FNV-1a Hash** → strong bit mixing (XOR + multiplication)  
-- **Polynomial Rolling Hash** → position-based weighting  
+- **FNV-1a Hash** → provides strong bit-level mixing using XOR and prime multiplication  
+- **Polynomial Rolling Hash** → introduces position-based weighting to capture character order  
 
 #### Working:
 
-1. Each character is converted to a numeric value  
-2. A polynomial weight is applied using powers of base (p = 31)  
-3. The result is mixed into the hash using FNV-1a operations:
+1. Each character is normalized by converting it to uppercase and mapping it to a numeric value (A = 1, ..., Z = 26)  
+
+2. A positional weight is applied using a polynomial factor:
+   
+   value × p^i  (where p = 31 and i is the character index)
+
+3. This weighted value is integrated into the hash using FNV-1a operations:
 
    H = (H XOR (value × p^i)) × FNV_prime  
 
-4. A finalization step is applied for extra bit mixing  
+   - XOR injects the new character information  
+   - Multiplication spreads the bits for better distribution  
+
+4. The hash is initialized with a key-dependent offset (FNV offset XOR key), ensuring different keys produce different hashes  
+
+5. A finalization step is applied to enhance the **avalanche effect**, ensuring that even a small change in input results in a significantly different hash output   
 
 ---
 
