@@ -50,7 +50,25 @@ This project uses a **customized hashing approach** that combines:
 
 4. The hash is initialized with a key-dependent offset (FNV offset XOR key), ensuring different keys produce different hashes  
 
-5. A finalization step is applied to enhance the **avalanche effect**, ensuring that even a small change in input results in a significantly different hash output   
+5. A finalization step is applied to enhance the **avalanche effect**, ensuring that even a small change in input results in a significantly different hash output
+
+### Finalization Function
+
+After the main hash computation, a **finalization step** is applied to improve the quality of the hash output.
+
+#### Purpose
+
+The finalize function enhances the **bit mixing** and ensures a stronger **avalanche effect**, where even a small change in the input produces a significantly different hash.
+
+#### Working
+
+The function performs a series of bitwise and arithmetic operations:
+
+```
+h ^= (h >> 16)
+h *= 0x85ebca6b
+h ^= (h >> 13)
+```
 
 ---
 
