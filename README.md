@@ -80,7 +80,7 @@ g++ -o multiplicative_cipher main.cpp
 
 ### Run
 ```bash
-./mustiplicative_cipher
+./multiplicative_cipher
 ```
 
 ---
